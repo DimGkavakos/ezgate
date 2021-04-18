@@ -257,15 +257,15 @@ cd ..
 echo "Installation of Geant4 10.07.p01 done."
 echo -e "\n"
 ## Installation of ITK
-echo "Installation of ITK 5.0.1 "
-cd $GPTH/GATE/InsightToolkit-5.0.1
+echo "Installation of ITK 5.1.2 "
+cd $GPTH/GATE/InsightToolkit-5.1.2
 mkdir bin
 cd bin
 cmake -DITK_USE_REVIEW=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DINSTALL_GTEST=ON -DITKV3_COMPATIBILITY=OFF -DITK_BUILD_DEFAULT_MODULES=ON -DITK_WRAP_PYTHON=OFF ..
 make -j$(nproc)
 sudo make install
 cd ../..
-echo "Installation of ITK 5.0.1 done."
+echo "Installation of ITK 5.1.2 done."
 echo -e "\n"
 ## Installation of GATE
 echo "Installation of Gate V9.0"
