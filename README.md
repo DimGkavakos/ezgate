@@ -1,4 +1,4 @@
-<img src="icon.png" align="center" />
+<img src="icon2.png" align="center" />
 
 # EZGATE INSTALLER
 > An EZ way to install GATE and its requirements
