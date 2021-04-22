@@ -12,15 +12,15 @@ echo "|_|  '--.-.-(   \/\;;\_\.-._______.-.                                     
 echo "(-)___     \ \ .-\ \;;\(   \       \ \                                       "
 echo " Y    '---._\_((Q)) \;;\\ .-\     __(_)                                      "
 echo " I           __'-' / .--.((Q))---'    \,            May the force            "
-echo " I     ___.-:    \|  |   \'-'_          \              be with you.          "
-echo " A  .-'      \ .-.\   \   \ \ '--.__     '\                                  "
-echo " |  |____.----((Q))\   \__|--\_      \     '     ||----------------------||  "
+echo " I     ___.-:    \|  |   \'-'_         \              be with you.           "
+echo " A  .-'      \ .-.\   \   \ \ '--.__    \                                    "
+echo " |  |____.----((Q))\   \__|--\_      \   '       ||----------------------||  "
 echo "    ( )        '-'  \_  :  \-' '--.___\          || Using latest builds. ||  "
 echo "     Y                \  \  \       \(_)         || Last update: 17/4/21 ||  "
 echo "     I                 \  \  \         \,        || By: D.Gkavakos       ||  "
-echo "     I                  \  \  \          \       ||----------------------||  "
-echo "     A                   \  \  \          '\                                 "
-echo "     |                    \  \__|           '                                "
+echo "     I                  \  \  \         \        ||----------------------||  "
+echo "     A                   \  \  \         \                                   "
+echo "     |                    \  \__|         '                                  "
 echo "                           \_:.  \                                           "
 echo "                             \ \  \                                          "
 echo "                              \ \  \                                         "
@@ -177,9 +177,10 @@ fi
 url_gate=" https://github.com/OpenGATE/Gate/archive/v9.0.zip"
 if validate_url url_gate; then
     echo "Url : $url_gate exists..."
-    wget  https://github.com/OpenGATE/Gate/archive/v9.0.zip
-    unzip v9.0.zip
-    rm v9.0.zip
+    wget  https://github.com/OpenGATE/Gate/archive/refs/tags/v9.1.zip
+    mv v9.1.zip Gate-9.1.zip
+	unzip Gate-9.1.zip
+    rm Gate-9.1.zip
 else
     echo "Url : $url_gate doesn't exists.."
     echo "The link seems to be broken, please contact the author to update the script"
@@ -202,7 +203,7 @@ echo "Installing the nice-to-have pre-requisites"
 if [ "$INSTALL_TYPE" = "yum" ]; then
 sudo yum check-update
 # To get Required packages
-sudo yum install git cmake gcc-c++ gcc binutils libX11-devel libXpm-devel libXft-devel libXext-devel -y
+sudo yum install git gcc-c++ gcc binutils libX11-devel libXpm-devel libXft-devel libXext-devel -y
 # To get optional packages
 sudo yum install gcc-gfortran openssl-devel pcre-devel mesa-libGL-devel mesa-libGLU-devel glew-devel ftgl-devel mysql-devel fftw-devel cfitsio-devel graphviz-devel avahi-compat-libdns_sd-devel libldap-dev python-devel libxml2-devel gsl-static -y
 fi
@@ -210,7 +211,7 @@ fi
 if [ "$INSTALL_TYPE" = "zypper" ]; then
 sudo zypper update -y
 # To get Required packages
-sudo zypper --non-interactive --quiet install git cmake bash gcc-c++ gcc binutils xorg-x11-libX11-devel xorg-x11-libXpm-devel xorg-x11-devel xorg-x11-proto-devel xorg-x11-libXext-devel
+sudo zypper --non-interactive --quiet install git bash gcc-c++ gcc binutils xorg-x11-libX11-devel xorg-x11-libXpm-devel xorg-x11-devel xorg-x11-proto-devel xorg-x11-libXext-devel
 # To get optional packages
 sudo zypper --non-interactive --quiet install gcc-fortran libopenssl-devel pcre-devel Mesa glew-devel pkg-config libmysqlclient-devel fftw3-devel libcfitsio-devel graphviz-devel libdns_sd avahi-compat-mDNSResponder-devel openldap2-devel python-devel libxml2-devel krb5-devel gsl-devel libqt4-devel
 fi
@@ -218,7 +219,7 @@ fi
 if [ "$INSTALL_TYPE" = "apt" ]; then
 sudo apt-get update
 # To get Required packages
-sudo apt-get install git cmake build-essential libqt4-opengl-dev qt4-qmake libqt4-dev libx11-dev libxmu-dev libxpm-dev libxft-dev libtbb-dev libnet-dev -y
+sudo apt-get install git build-essential libqt4-opengl-dev qt4-qmake libqt4-dev libx11-dev libxmu-dev libxpm-dev libxft-dev libtbb-dev libnet-dev -y
 # To get optional packages
 sudo apt-get install gfortran libssl-dev libpcre3-dev xlibmesa-glu-dev libglew1.5-dev libftgl-dev libmysqlclient-dev libfftw3-dev libcfitsio-dev graphviz-dev libavahi-compat-libdnssd-dev libldap2-dev python-dev libxml2-dev libkrb5-dev libgsl0-dev -y
 fi
@@ -261,18 +262,19 @@ echo "Installation of ITK 5.1.2 "
 cd $GPTH/GATE/InsightToolkit-5.1.2
 mkdir bin
 cd bin
-cmake -DITK_USE_REVIEW=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=ON -DINSTALL_GTEST=ON -DITKV3_COMPATIBILITY=OFF -DITK_BUILD_DEFAULT_MODULES=ON -DITK_WRAP_PYTHON=OFF ..
+cmake -DITK_USE_REVIEW=ON -DBUILD_EXAMPLES=ON -DBUILD_TESTING=OFF -DINSTALL_GTEST=ON -DITKV3_COMPATIBILITY=OFF -DITK_BUILD_DEFAULT_MODULES=ON -DITK_WRAP_PYTHON=OFF ..
 make -j$(nproc)
 sudo make install
 cd ../..
 echo "Installation of ITK 5.1.2 done."
 echo -e "\n"
 ## Installation of GATE
-echo "Installation of Gate V9.0"
-sudo mkdir Gate-9.0-build
-sudo mkdir Gate-9.0-install
-cd Gate-9.0-build
-cmake -DCMAKE_INSTALL_PREFIX=$GPTH/GATE/Gate-9.0-install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RELEASE -DGATE_DOWNLOAD_BENCHMARKS_DATA=OFF -DGATE_USE_DAVIS=OFF -DGATE_USE_ECAT7=OFF -DGATE_USE_GEANT4_UIVIS=ON -DGATE_USE_GPU=OFF -DGATE_USE_ITK=ON -DGATE_USE_LMF=OFF -DGATE_USE_OPTICAL=ON -DGATE_USE_RTK=OFF -DGATE_USE_STDC11=ON -DGATE_USE_SYSTEM_CLHEP=OFF -DGATE_USE_XRAYLIB=OFF -DGeant4_DIR=$GPTH/GATE/geant4.10.07.p01-install/lib/Geant4-10.07.1 -DITK_DIR=/usr/local/lib/cmake/ITK-5.0 -DROOTCINT_EXECUTABLE=$GPTH/GATE/root-6.24.00-build/bin/rootcint -DROOT_CONFIG_EXECUTABLE=$GPTH/GATE/root-6.24.00-build/bin/root-config $GPTH/GATE/Gate-9.0
+echo "Installation of Gate V9.1"
+cd $GPTH/GATE
+mkdir Gate-9.1-build
+mkdir Gate-9.1-install
+cd Gate-9.1-build
+cmake -DCMAKE_INSTALL_PREFIX=$GPTH/GATE/Gate-9.1-install -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RELEASE -DGATE_DOWNLOAD_BENCHMARKS_DATA=OFF -DGATE_USE_DAVIS=OFF -DGATE_USE_ECAT7=OFF -DGATE_USE_GEANT4_UIVIS=ON -DGATE_USE_GPU=OFF -DGATE_USE_ITK=ON -DGATE_USE_LMF=OFF -DGATE_USE_OPTICAL=ON -DGATE_USE_RTK=OFF -DGATE_USE_STDC11=ON -DGATE_USE_SYSTEM_CLHEP=OFF -DGATE_USE_XRAYLIB=OFF -DGeant4_DIR=$GPTH/GATE/geant4.10.07.p01-install/lib/Geant4-10.07.1 -DITK_DIR=/usr/local/lib/cmake/ITK-5.1 -DROOTCINT_EXECUTABLE=$GPTH/GATE/root-6.24.00-build/bin/rootcint -DROOT_CONFIG_EXECUTABLE=$GPTH/GATE/root-6.24.00-build/bin/root-config $GPTH/GATE/Gate-9.1
 make -j$(nproc)
 make install
 echo "Installation of Gate V9.0 done."
@@ -282,10 +284,10 @@ cd ..
 touch gate_env.sh
 echo 'source' $GPTH'/GATE/root-6.24.00-build/bin/thisroot.sh' >> gate_env.sh
 echo 'source' $GPTH'/GATE/geant4.10.07.p01-install/bin/geant4.sh' >> gate_env.sh
-echo 'export PATH=$PATH:'$GPTH'/GATE/Gate-9.0-install/bin' >> gate_env.sh
+echo 'export PATH=$PATH:'$GPTH'/GATE/Gate-9.1-install/bin' >> gate_env.sh
 echo -e "\n" >> ~/.bashrc
 echo '# export path variable for GATE' >> ~/.bashrc
-echo 'alias gate90'='"source '$GPTH'/GATE/gate_env.sh''"' >> ~/.bashrc
+echo 'alias Gate'='"source '$GPTH'/GATE/gate_env.sh''"' >> ~/.bashrc
 source ~/.bashrc
 
 ## verify if Gate is installed and present in $GPTH/GATE/Gate-9.0-install/bin
@@ -312,13 +314,13 @@ Advice if you are not an advanced user : Always answer yes for HTcondor prompt G
 done
 ## Installation of Cluster tools for Ubuntu users
 #jobsplitter
-cd $GPTH/GATE/Gate-9.0/cluster_tools/jobsplitter
+cd $GPTH/GATE/Gate-9.1/cluster_tools/jobsplitter
 make
-cp $GPTH/GATE/Gate-9.0/cluster_tools/jobsplitter/gjs $GPTH/GATE/Gate-9.0-install/bin
+cp $GPTH/GATE/Gate-9.1/cluster_tools/jobsplitter/gjs $GPTH/GATE/Gate-9.1-install/bin
 #filemerger
-cd $GPTH/GATE/Gate-9.0/cluster_tools/filemerger
+cd $GPTH/GATE/Gate-9.1/cluster_tools/filemerger
 make
-cp $GPTH/GATE/Gate-9.0/cluster_tools/filemerger/gjm $GPTH/GATE/Gate-9.0-install/bin
+cp $GPTH/GATE/Gate-9.1/cluster_tools/filemerger/gjm $GPTH/GATE/Gate-9.1-install/bin
 #HTcondor for multicore processing (clustering) (always anwser yes to gui prompt for easy use)
 sudo apt-get install htcondor -y
 sudo condor_master
