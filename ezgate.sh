@@ -1,5 +1,7 @@
 #!/bin/sh
 
+
+
 # Script για ευκολη εγκατασταση της GATE και οτι χρεαιζεται για αυτη
 # Το εφτιαξα με την βοηθεια ενος αλλου script απο τον Alexandre
 # Version 1.0
@@ -25,12 +27,14 @@ echo "                           \_:.  \                                        
 echo "                             \ \  \                                          "
 echo "                              \ \  \                                         "
 echo "                               \_\_|                                         "
+echo ""
+
 
 function validate_url(){
   if [[ `wget -S --spider $1  2>&1 | grep 'HTTP/1.1 200 OK'` ]]; then echo "true"; fi
 }
 
-## Check os release
+##DISTRO CHECK
 DISTRO=$( cat /etc/*-release | tr [:upper:] [:lower:] | grep -Poi '(debian|ubuntu|red hat|centos|scientific|opensuse)' | uniq -c | sort -r | head -1|  xargs | cut -d" " -f2- )
 if [[ -z $DISTRO ]]; then
     DISTRO='unknown'
@@ -49,7 +53,7 @@ elif [[ $DISTRO =~ "opensuse" ]]; then
     INSTALL_TYPE='zypper'
 fi
 
-
+## Check internet connection
 wget -q --spider http://google.com
 if [ $? -eq 0 ]; then
     echo "Your internet connection has been successfully tested"
@@ -246,16 +250,16 @@ cd ..
 echo "Installation of root-6.24.00 done."
 echo -e "\n"
 ## Installation of Geant4
-echo "Installation of Geant4 10.7.p01"
-mkdir geant4.10.07.p01-build
-mkdir geant4.10.07.p01-install
-cd $GPTH/GATE/geant4.10.07.p01-build
-cmake -DCMAKE_INSTALL_PREFIX=$GPTH/GATE/geant4.10.07.p01-install -DCMAKE_BUILD_TYPE=Debug -DGEANT4_BUILD_MULTITHREADED=OFF -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_G3TOG4=OFF -DGEANT4_USE_GDML=OFF -DGEANT4_USE_INVENTOR=OFF -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_QT=ON -DGEANT4_USE_RAYTRACER_X11=OFF -DGEANT4_USE_SYSTEM_EXPAT=OFF -DGEANT4_USE_SYSTEM_ZLIB=OFF -DGEANT4_USE_XM=OFF $GPTH/GATE/geant4.10.07.p01
+echo "Installation of Geant4 10.6.p01"
+mkdir geant4.10.06.p01-build
+mkdir geant4.10.06.p01-install
+cd $GPTH/GATE/geant4.10.06.p01-build
+cmake -DCMAKE_INSTALL_PREFIX=$GPTH/GATE/geant4.10.06.p01-install -DCMAKE_BUILD_TYPE=RELEASE -DGEANT4_BUILD_MULTITHREADED=OFF -DGEANT4_INSTALL_DATA=ON -DGEANT4_USE_G3TOG4=OFF -DGEANT4_USE_GDML=OFF -DGEANT4_USE_INVENTOR=OFF -DGEANT4_USE_OPENGL_X11=ON -DGEANT4_USE_QT=ON -DGEANT4_USE_RAYTRACER_X11=OFF -DGEANT4_USE_SYSTEM_EXPAT=ON -DGEANT4_USE_SYSTEM_ZLIB=OFF -DGEANT4_USE_XM=OFF $GPTH/GATE/geant4.10.06.p01
 make -j$(nproc)
 make install
-source $GPTH/GATE/geant4.10.07.p01-install/bin/geant4.sh
+source $GPTH/GATE/geant4.10.06.p01-install/bin/geant4.sh
 cd ..
-echo "Installation of Geant4 10.07.p01 done."
+echo "Installation of Geant4 10.4.p02 done."
 echo -e "\n"
 ## Installation of ITK
 echo "Installation of ITK 5.1.2 "
@@ -290,6 +294,7 @@ echo '# export path variable for GATE' >> ~/.bashrc
 echo 'alias Gate'='"source '$GPTH'/GATE/gate_env.sh''"' >> ~/.bashrc
 source ~/.bashrc
 
+
 ## verify if Gate is installed and present in $GPTH/GATE/Gate-9.0-install/bin
 gate90
 if ! which Gate 2>/dev/null
@@ -314,7 +319,7 @@ Advice if you are not an advanced user : Always answer yes for HTcondor prompt G
 done
 ## Installation of Cluster tools for Ubuntu users
 #jobsplitter
-cd $GPTH/GATE/Gate-9.1/cluster_tools/jobsplitter
+ccd $GPTH/GATE/Gate-9.1/cluster_tools/jobsplitter
 make
 cp $GPTH/GATE/Gate-9.1/cluster_tools/jobsplitter/gjs $GPTH/GATE/Gate-9.1-install/bin
 #filemerger
