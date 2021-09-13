@@ -6,12 +6,12 @@
 
 
 ## INCLUDES
-
+Updated on 13/9/2021
 - CMake
-- Rootv6.24.00
+- Rootv6.24.01
 - Geant4.10.07.p01
-- InsightToolkit 5.1.2
-- Gate 9.0
+- InsightToolkit 5.2.1
+- Gate 9.1
 
 
 
